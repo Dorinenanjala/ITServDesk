@@ -29,7 +29,7 @@ export default function StatusUpdateModal({ ticket, isOpen, onClose }: StatusUpd
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/tickets"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/tickets/stats"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/stats"] });
       toast({
         title: "Success",
         description: "Ticket status updated successfully",

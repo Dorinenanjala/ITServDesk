@@ -44,7 +44,7 @@ export default function NewTicket() {
     mutationFn: (data: InsertTicket) => apiRequest("POST", "/api/tickets", data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/tickets"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/tickets/stats"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/stats"] });
       toast({
         title: "Success",
         description: "Ticket created successfully",

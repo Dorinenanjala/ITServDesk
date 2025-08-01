@@ -12,7 +12,7 @@ interface Stats {
 
 export default function StatsCards() {
   const { data: stats, isLoading } = useQuery<Stats>({
-    queryKey: ["/api/tickets/stats"],
+    queryKey: ["/api/stats"],
   });
 
   if (isLoading) {
