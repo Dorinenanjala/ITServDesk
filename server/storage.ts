@@ -75,11 +75,14 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getTicketsByUser(userId: string): Promise<Ticket[]> {
-    return await db
+    console.log(`[DEBUG] Querying tickets for user ID: ${userId}`);
+    const result = await db
       .select()
       .from(tickets)
       .where(eq(tickets.createdBy, userId))
       .orderBy(desc(tickets.createdAt));
+    console.log(`[DEBUG] Query result:`, result.map(t => ({ id: t.id, room: t.room, createdBy: t.createdBy })));
+    return result;
   }
 
   async getTicket(id: string): Promise<Ticket | undefined> {

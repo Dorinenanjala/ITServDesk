@@ -120,18 +120,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/tickets", requireAuth, async (req: any, res) => {
     try {
       const user = req.user;
+      console.log(`[DEBUG] User requesting tickets:`, { id: user.id, username: user.username, role: user.role });
       let tickets;
       
       if (user.role === 'admin') {
         // Admin can see all tickets
+        console.log(`[DEBUG] Admin user - fetching all tickets`);
         tickets = await storage.getTickets();
       } else {
         // Regular users can only see their own tickets
+        console.log(`[DEBUG] Regular user - fetching tickets for user ID: ${user.id}`);
         tickets = await storage.getTicketsByUser(user.id);
       }
       
+      console.log(`[DEBUG] Found ${tickets.length} tickets for user ${user.username}`);
       res.json(tickets);
     } catch (error) {
+      console.error("Error fetching tickets:", error);
       res.status(500).json({ message: "Failed to fetch tickets" });
     }
   });
