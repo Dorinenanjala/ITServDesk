@@ -33,17 +33,32 @@ Preferred communication style: Simple, everyday language.
 - **Schema Design**: Tickets table with fields for date, room, issue description, action taken, solved by, and status
 
 ### Authentication and Authorization
-- **Current State**: Basic session management structure in place using connect-pg-simple for PostgreSQL session storage
-- **User Management**: Placeholder authentication with static "Admin User" display
-- **Future Enhancement**: Ready for implementation of proper authentication system
+- **Authentication System**: Full role-based authentication implemented using Passport.js with local strategy
+- **User Roles**: Two-tier system with Admin and User roles
+  - Admin users: Full access to all tickets, user management, and system administration
+  - Regular users: Can create and view only their own tickets, isolated from other users' data
+- **Data Isolation**: Role-based filtering ensures users cannot access tickets created by other users
+- **Session Management**: PostgreSQL-based session storage using connect-pg-simple
+- **Password Security**: bcryptjs for secure password hashing
+- **Demo Accounts**: 
+  - Admin: username `admin`, password `admin123`
+  - User: username `user`, password `user123`
 
 ### API Structure
-- **Ticket Management**:
-  - `GET /api/tickets` - Retrieve all tickets with sorting by creation date
-  - `GET /api/tickets/:id` - Retrieve single ticket by ID
-  - `POST /api/tickets` - Create new ticket with validation
-  - `PATCH /api/tickets/:id` - Update existing ticket
-  - `DELETE /api/tickets/:id` - Delete ticket (implementation pending)
+- **Authentication**:
+  - `POST /api/auth/login` - User login with username/password
+  - `POST /api/auth/register` - User registration
+  - `POST /api/auth/logout` - User logout
+  - `GET /api/auth/user` - Get current user information
+- **Ticket Management** (Role-based access):
+  - `GET /api/tickets` - Retrieve tickets (all for admin, user's own for regular users)
+  - `GET /api/tickets/:id` - Retrieve single ticket (with ownership validation)
+  - `POST /api/tickets` - Create new ticket (automatically assigned to creator)
+  - `PATCH /api/tickets/:id` - Update existing ticket (with ownership validation)
+  - `DELETE /api/tickets/:id` - Delete ticket (admin only)
+  - `GET /api/stats` - Get ticket statistics (role-based filtering)
+- **User Management** (Admin only):
+  - `GET /api/users` - Retrieve all users
 - **Data Validation**: Zod schemas for request validation and type safety
 - **Response Format**: Consistent JSON responses with proper error handling
 

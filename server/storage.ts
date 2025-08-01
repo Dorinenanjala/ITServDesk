@@ -20,6 +20,7 @@ export interface IStorage {
 
   // Ticket operations
   getTickets(): Promise<Ticket[]>;
+  getTicketsByUser(userId: string): Promise<Ticket[]>;
   getTicket(id: string): Promise<Ticket | undefined>;
   createTicket(ticket: InsertTicket, createdBy: string): Promise<Ticket>;
   updateTicket(id: string, updates: UpdateTicket): Promise<Ticket | undefined>;
@@ -70,6 +71,14 @@ export class DatabaseStorage implements IStorage {
     return await db
       .select()
       .from(tickets)
+      .orderBy(desc(tickets.createdAt));
+  }
+
+  async getTicketsByUser(userId: string): Promise<Ticket[]> {
+    return await db
+      .select()
+      .from(tickets)
+      .where(eq(tickets.createdBy, userId))
       .orderBy(desc(tickets.createdAt));
   }
 
